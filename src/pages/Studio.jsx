@@ -69,13 +69,30 @@ export default function Studio() {
   const download = async () => {
     if (!cardRef.current) return
     setSaving(true)
+    let holder = null
     try {
       const html2canvas = await loadHtml2Canvas()
-      const canvas = await html2canvas(cardRef.current, {
+      // overflow:auto 미리보기 컨테이너 안에서 캡처하면 배경이 뷰포트 기준으로
+      // 잘리는 html2canvas 문제가 있어, 문서 최상단에 클론을 만들어 캡처한다
+      const clone = cardRef.current.cloneNode(true)
+      holder = document.createElement('div')
+      holder.style.position = 'absolute'
+      holder.style.left = '0'
+      holder.style.top = '0'
+      holder.style.zIndex = '-1'
+      holder.style.pointerEvents = 'none'
+      holder.appendChild(clone)
+      document.body.appendChild(holder)
+
+      const canvas = await html2canvas(clone, {
         width: 1080,
         height: 1080,
         scale: 1,
         backgroundColor: '#edebe6',
+        windowWidth: 1200,
+        windowHeight: 1200,
+        scrollX: 0,
+        scrollY: 0,
       })
       const link = document.createElement('a')
       link.download = `zzan-battle-card-${Date.now()}.png`
@@ -83,6 +100,8 @@ export default function Studio() {
       link.click()
     } catch {
       alert('PNG 저장에 실패했어요. 카드 영역을 스크린샷으로 찍어주세요.')
+    } finally {
+      if (holder) holder.remove()
     }
     setSaving(false)
   }
