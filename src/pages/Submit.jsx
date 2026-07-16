@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { randomNickname, containsBanned } from '../lib/nickname'
+import { OPEN_CHAT_URL } from '../lib/config'
 
 const MAX_LEN = 200
 
@@ -90,6 +91,7 @@ export default function Submit() {
             placeholder="예: 배달비 아까워서 직접 갔다가 오는 길에 붕어빵 삼천원어치 삼"
           />
           <div className="char-count">{content.length} / {MAX_LEN}</div>
+          <p className="field-note">욕설·비방·광고·사이트와 무관한 내용은 검수에서 반려됩니다.</p>
         </div>
 
         <div className="field">
@@ -102,6 +104,11 @@ export default function Submit() {
             onChange={(e) => setContact(e.target.value)}
             placeholder="카톡 오픈채팅 링크 또는 인스타 아이디 — 우승 시 연락에만 사용, 공개 안 됨"
           />
+          <p className="field-note">
+            비워두셔도 돼요. 국밥 수령은{' '}
+            <a href={OPEN_CHAT_URL} target="_blank" rel="noreferrer">짠내배틀 본부(오픈채팅)</a>
+            에서도 가능합니다.
+          </p>
         </div>
 
         <button className="btn btn-sticker" onClick={handleSubmit} disabled={sending}>
@@ -109,6 +116,10 @@ export default function Submit() {
         </button>
 
         {msg && <p className={`form-msg ${msg.type}`}>{msg.text}</p>}
+        <p className="field-note" style={{ marginTop: 12 }}>
+          모든 사연은 검수 후 배틀에 등판합니다. 자세한 처리 기준은{' '}
+          <a href="/privacy">개인정보처리방침</a>을 참고하세요.
+        </p>
       </div>
     </div>
   )

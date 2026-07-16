@@ -615,3 +615,48 @@ button.receipt:disabled:hover { transform: none; box-shadow: 0 2px 0 rgba(28, 27
 
 .done-bonus { background: transparent; border-color: var(--line); color: var(--muted); }
 .done-bonus:hover { background: var(--bg); color: var(--ink); }
+
+
+/* ── 안내 문구/본부 배너/방침 ── */
+.field-note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 6px;
+  word-break: keep-all;
+}
+
+.field-note a { text-decoration: underline; }
+
+.hq-banner {
+  margin-top: 24px;
+  background: var(--paper);
+  border: 1.5px dashed var(--ink);
+  padding: 14px 16px;
+  font-size: 0.85rem;
+  word-break: keep-all;
+}
+
+.hq-banner a { font-weight: 700; text-decoration: underline; }
+
+.footer-links {
+  margin-top: 10px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.footer-links a { text-decoration: underline; }
+
+.policy {
+  background: var(--paper);
+  padding: 26px 22px;
+  box-shadow: 0 2px 0 rgba(28, 27, 24, 0.12);
+  font-size: 0.88rem;
+  word-break: keep-all;
+}
+
+.policy h2 { font-size: 0.95rem; margin: 18px 0 6px; }
+.policy h2:first-child { margin-top: 0; }
+.policy ul { padding-left: 18px; margin: 6px 0; }
+.policy li { margin-bottom: 4px; }
+.policy-date { margin-top: 20px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }

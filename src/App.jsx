@@ -4,6 +4,8 @@ import Submit from './pages/Submit'
 import Ranking from './pages/Ranking'
 import Fame from './pages/Fame'
 import Studio from './pages/Studio'
+import Privacy from './pages/Privacy'
+import { OPEN_CHAT_URL } from './lib/config'
 
 export default function App() {
   return (
@@ -26,10 +28,15 @@ export default function App() {
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/fame" element={<Fame />} />
         <Route path="/studio" element={<Studio />} />
+        <Route path="/privacy" element={<Privacy />} />
       </Routes>
 
       <footer className="footer">
         짠내배틀은 웃을 수 있는 불행만 접수합니다. 진짜 힘든 순간엔 배틀 말고 주변에 손을 내밀어 주세요.
+        <div className="footer-links">
+          <a href={OPEN_CHAT_URL} target="_blank" rel="noreferrer">본부 오픈채팅</a>
+          <NavLink to="/privacy">개인정보처리방침</NavLink>
+        </div>
       </footer>
     </div>
   )

@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase, getVoterKey } from '../lib/supabase'
+import { OPEN_CHAT_URL } from '../lib/config'
 
 const DAILY_COUNT = 10
+const BONUS_LIMIT = 5
 
 function todayKey() {
   const d = new Date()
@@ -19,7 +21,7 @@ function loadSession(stories) {
   try {
     const saved = JSON.parse(localStorage.getItem(key))
     if (saved && Array.isArray(saved.pairs) && typeof saved.done === 'number') {
-      return { key, pairs: saved.pairs, done: saved.done }
+      return { key, pairs: saved.pairs, done: saved.done, bonus: saved.bonus || 0 }
     }
   } catch { /* 손상된 세션은 새로 생성 */ }
 
@@ -28,13 +30,13 @@ function loadSession(stories) {
   for (let i = 0; i + 1 < shuffled.length && pairs.length < DAILY_COUNT; i += 2) {
     pairs.push([shuffled[i].id, shuffled[i + 1].id])
   }
-  const session = { pairs, done: 0 }
+  const session = { pairs, done: 0, bonus: 0 }
   localStorage.setItem(key, JSON.stringify(session))
   return { key, ...session }
 }
 
 function saveSession(session) {
-  localStorage.setItem(session.key, JSON.stringify({ pairs: session.pairs, done: session.done }))
+  localStorage.setItem(session.key, JSON.stringify({ pairs: session.pairs, done: session.done, bonus: session.bonus || 0 }))
 }
 
 function ReceiptCard({ story, onVote, voted, isWinner, pct, disabled }) {
@@ -173,13 +175,24 @@ export default function Battle() {
     setVotedFor(null)
     setError('')
     if (mode === 'bonus') {
-      loadBonus()
+      const usedBonus = (session.bonus || 0) + 1
+      const next = { ...session, bonus: usedBonus }
+      setSession(next)
+      saveSession(next)
+      if (usedBonus >= BONUS_LIMIT) {
+        setMode('daily') // 보너스 소진 → 마무리 화면으로
+      } else {
+        loadBonus()
+      }
     } else {
       const next = { ...session, done: session.done + 1 }
       setSession(next)
       saveSession(next)
     }
   }
+
+  const bonusUsed = session ? session.bonus || 0 : 0
+  const bonusLeft = Math.max(0, BONUS_LIMIT - bonusUsed)
 
   const startBonus = () => {
     setMode('bonus')
@@ -201,17 +214,22 @@ export default function Battle() {
         <div className="done-card">
           <div className="done-stamp">판정 완료</div>
           <p className="done-text">
-            오늘의 {total}판, 배심원 수고하셨습니다.
-            <br />
-            내일 0시에 새 대진이 열립니다.
+            {bonusLeft > 0 ? (
+              <>오늘의 {total}판, 배심원 수고하셨습니다.<br />내일 0시에 새 대진이 열립니다.</>
+            ) : (
+              <>오늘의 짠내는 여기까지.<br />내일 0시, 새 대진 {DAILY_COUNT}판과 함께 돌아오세요.</>
+            )}
           </p>
           <div className="done-actions">
-            <Link to="/ranking" className="btn btn-sticker">이번 주 순위 보기</Link>
+            <a href={OPEN_CHAT_URL} target="_blank" rel="noreferrer" className="btn btn-sticker">본부 입장 (오픈채팅)</a>
+            <Link to="/ranking" className="btn">이번 주 순위</Link>
             <Link to="/submit" className="btn">내 사연도 접수</Link>
           </div>
-          <button className="btn-small done-bonus" onClick={startBonus}>
-            아직 짠내가 고픈 분들을 위한 보너스 배틀 →
-          </button>
+          {bonusLeft > 0 && (
+            <button className="btn-small done-bonus" onClick={startBonus}>
+              아직 짠내가 고픈 분들을 위한 보너스 배틀 (오늘 {bonusLeft}판 남음) →
+            </button>
+          )}
         </div>
       </div>
     )
@@ -242,7 +260,7 @@ export default function Battle() {
       ) : (
         <div className="progress-row">
           <span>보너스 배틀</span>
-          <span>무제한</span>
+          <span>{bonusUsed + 1} / {BONUS_LIMIT}</span>
         </div>
       )}
       {mode === 'daily' && (
@@ -262,7 +280,9 @@ export default function Battle() {
       <div className="battle-actions">
         {votedFor ? (
           <button className="btn btn-sticker" onClick={nextBattle}>
-            {mode === 'daily' && dailyDone + 1 >= total ? '판정 마치기' : '다음 배틀 →'}
+            {mode === 'bonus'
+              ? (bonusUsed + 1 >= BONUS_LIMIT ? '오늘은 여기까지' : '다음 배틀 →')
+              : (dailyDone + 1 >= total ? '판정 마치기' : '다음 배틀 →')}
           </button>
         ) : (
           <p className="hint">투표하면 결과가 공개됩니다</p>

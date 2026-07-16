@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { OPEN_CHAT_URL } from '../lib/config'
 
 export default function Ranking() {
   const [rows, setRows] = useState(null)
@@ -38,6 +39,11 @@ export default function Ranking() {
           ))}
         </div>
       )}
+
+      <div className="hq-banner">
+        이번 주 국밥왕 발표와 수령 인증은 본부에서 먼저 뜹니다.{' '}
+        <a href={OPEN_CHAT_URL} target="_blank" rel="noreferrer">본부 입장 →</a>
+      </div>
     </div>
   )
 }
