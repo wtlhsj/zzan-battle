@@ -7,6 +7,7 @@ const MAX_LEN = 200
 export default function Submit() {
   const [nickname, setNickname] = useState('')
   const [content, setContent] = useState('')
+  const [contact, setContact] = useState('')
   const [msg, setMsg] = useState(null)
   const [sending, setSending] = useState(false)
 
@@ -32,7 +33,11 @@ export default function Submit() {
     }
 
     setSending(true)
-    const { error } = await supabase.from('stories').insert({ nickname: nick, content: body })
+    const { error } = await supabase.from('stories').insert({
+      nickname: nick,
+      content: body,
+      contact: contact.trim() || null,
+    })
     setSending(false)
 
     if (error) {
@@ -41,6 +46,7 @@ export default function Submit() {
       setMsg({ type: 'ok', text: '접수 완료! 검수 후 배틀에 등판합니다. 국밥이 걸려 있으니 공정하게 심사할게요.' })
       setNickname('')
       setContent('')
+      setContact('')
     }
   }
 
@@ -84,6 +90,18 @@ export default function Submit() {
             placeholder="예: 배달비 아까워서 직접 갔다가 오는 길에 붕어빵 삼천원어치 삼"
           />
           <div className="char-count">{content.length} / {MAX_LEN}</div>
+        </div>
+
+        <div className="field">
+          <label htmlFor="contact">국밥 받을 곳 (선택)</label>
+          <input
+            id="contact"
+            type="text"
+            maxLength={200}
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            placeholder="카톡 오픈채팅 링크 또는 인스타 아이디 — 우승 시 연락에만 사용, 공개 안 됨"
+          />
         </div>
 
         <button className="btn btn-sticker" onClick={handleSubmit} disabled={sending}>

@@ -3,6 +3,7 @@ import Battle from './pages/Battle'
 import Submit from './pages/Submit'
 import Ranking from './pages/Ranking'
 import Fame from './pages/Fame'
+import Studio from './pages/Studio'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/submit" element={<Submit />} />
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/fame" element={<Fame />} />
+        <Route path="/studio" element={<Studio />} />
       </Routes>
 
       <footer className="footer">
