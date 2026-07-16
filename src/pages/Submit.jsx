@@ -8,7 +8,6 @@ const MAX_LEN = 200
 export default function Submit() {
   const [nickname, setNickname] = useState('')
   const [content, setContent] = useState('')
-  const [contact, setContact] = useState('')
   const [msg, setMsg] = useState(null)
   const [sending, setSending] = useState(false)
 
@@ -34,20 +33,23 @@ export default function Submit() {
     }
 
     setSending(true)
+    const code = '국밥' + Math.floor(1000 + Math.random() * 9000)
     const { error } = await supabase.from('stories').insert({
       nickname: nick,
       content: body,
-      contact: contact.trim() || null,
+      claim_code: code,
     })
     setSending(false)
 
     if (error) {
       setMsg({ type: 'err', text: '접수에 실패했어요. 잠시 후 다시 시도해주세요.' })
     } else {
-      setMsg({ type: 'ok', text: '접수 완료! 검수 후 배틀에 등판합니다. 국밥이 걸려 있으니 공정하게 심사할게요.' })
+      setMsg({
+        type: 'ok',
+        text: `접수 완료! 당신의 수령 코드는 [${code}] — 우승하면 본부(오픈채팅)에서 본부장에게 이 코드를 보내 국밥을 수령합니다. 지금 캡처해두세요!`,
+      })
       setNickname('')
       setContent('')
-      setContact('')
     }
   }
 
@@ -95,19 +97,12 @@ export default function Submit() {
         </div>
 
         <div className="field">
-          <label htmlFor="contact">국밥 받을 곳 (선택)</label>
-          <input
-            id="contact"
-            type="text"
-            maxLength={200}
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-            placeholder="카톡 오픈채팅 링크 또는 인스타 아이디 — 우승 시 연락에만 사용, 공개 안 됨"
-          />
-          <p className="field-note">
-            비워두셔도 돼요. 국밥 수령은{' '}
+          <label>국밥 수령 안내</label>
+          <p className="field-note" style={{ marginTop: 0 }}>
+            접수 완료 시 발급되는 <strong>수령 코드</strong>가 우승 인증 수단입니다.
+            국밥 수령은{' '}
             <a href={OPEN_CHAT_URL} target="_blank" rel="noreferrer">짠내배틀 본부(오픈채팅)</a>
-            에서도 가능합니다.
+            에서만 진행됩니다.
           </p>
         </div>
 
