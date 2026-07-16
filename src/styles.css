@@ -471,8 +471,7 @@ button.receipt:disabled:hover { transform: none; box-shadow: 0 2px 0 rgba(28, 27
 
 .card-grid {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 40px;
   position: relative;
   align-items: stretch;
@@ -493,6 +492,9 @@ button.receipt:disabled:hover { transform: none; box-shadow: 0 2px 0 rgba(28, 27
 }
 
 .card-receipt {
+  width: 460px;
+  flex: 0 0 460px;
+  box-sizing: border-box;
   background: var(--paper);
   padding: 44px 40px 56px;
   box-shadow: 0 6px 0 rgba(28, 27, 24, 0.12);
