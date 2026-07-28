@@ -664,3 +664,140 @@ button.receipt:disabled:hover { transform: none; box-shadow: 0 2px 0 rgba(28, 27
 .policy ul { padding-left: 18px; margin: 6px 0; }
 .policy li { margin-bottom: 4px; }
 .policy-date { margin-top: 20px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+
+/* ── 익명 댓글 (한 줄 위로) ── */
+.comments-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 14px;
+  align-items: start;
+  margin-top: 14px;
+}
+
+.cmt-vs-spacer { visibility: hidden; align-self: start; }
+
+.cmt-toggle {
+  width: 100%;
+  background: var(--paper);
+  border: 1.5px dashed var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 9px 12px;
+  text-align: left;
+}
+
+.cmt-toggle:hover { border-color: var(--ink); color: var(--ink); }
+
+.cmt-panel {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-top: none;
+  padding: 12px;
+}
+
+.cmt-empty {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 12px 4px;
+  word-break: keep-all;
+}
+
+.cmt-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+
+.cmt-item { border-bottom: 1px dashed var(--line); padding-bottom: 10px; }
+.cmt-item:last-child { border-bottom: none; padding-bottom: 0; }
+.cmt-item.hidden .cmt-content { color: var(--muted); font-style: italic; }
+
+.cmt-line { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+.cmt-name { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink); font-weight: 600; }
+
+.cmt-best {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: var(--sticker);
+  color: var(--ink);
+  padding: 1px 5px;
+  letter-spacing: 0.03em;
+}
+
+.cmt-content { font-size: 0.9rem; word-break: keep-all; line-height: 1.5; }
+
+.cmt-actions { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+
+.cmt-empathy {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  color: var(--muted);
+}
+
+.cmt-empathy.on { background: var(--sticker); border-color: var(--ink); color: var(--ink); font-weight: 600; }
+
+.cmt-menu-wrap { position: relative; margin-left: auto; }
+
+.cmt-more { background: none; border: none; color: var(--muted); font-size: 1rem; padding: 0 6px; line-height: 1; }
+.cmt-more:hover { color: var(--ink); }
+
+.cmt-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 5;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  box-shadow: 0 2px 0 rgba(28, 27, 24, 0.12);
+}
+
+.cmt-menu button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 7px 16px;
+  font-size: 0.78rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.cmt-menu button:hover { background: var(--bg); }
+
+.cmt-input { border-top: 1px dashed var(--line); padding-top: 10px; }
+
+.cmt-input textarea {
+  width: 100%;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  padding: 8px 10px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  resize: vertical;
+}
+
+.cmt-input textarea:focus { outline: 2px solid var(--sticker); }
+
+.cmt-input-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+.cmt-count { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
+
+.cmt-error { color: var(--stamp); font-size: 0.78rem; margin-top: 6px; word-break: keep-all; }
+
+.cmt-closed {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 10px 4px;
+  border-top: 1px dashed var(--line);
+  word-break: keep-all;
+}
+
+.cmt-flash { font-size: 0.76rem; color: var(--muted); text-align: center; margin-top: 8px; }
+
+@media (max-width: 640px) {
+  .comments-row { grid-template-columns: 1fr; }
+  .cmt-vs-spacer { display: none; }
+}

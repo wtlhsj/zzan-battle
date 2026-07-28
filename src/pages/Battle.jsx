@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase, getVoterKey } from '../lib/supabase'
 import { OPEN_CHAT_URL } from '../lib/config'
+import CommentThread from '../components/CommentThread'
 
 const DAILY_COUNT = 10
 const BONUS_LIMIT = 5
@@ -273,6 +274,12 @@ export default function Battle() {
         <ReceiptCard story={a} onVote={handleVote} voted={!!votedFor} isWinner={votedFor === a.id} pct={pctOf(a)} disabled={!!votedFor} />
         <div className="vs-badge">VS</div>
         <ReceiptCard story={b} onVote={handleVote} voted={!!votedFor} isWinner={votedFor === b.id} pct={pctOf(b)} disabled={!!votedFor} />
+      </div>
+
+      <div className="comments-row">
+        <CommentThread key={a.id} storyId={a.id} storyName={a.nickname} />
+        <div className="vs-badge cmt-vs-spacer" aria-hidden="true">VS</div>
+        <CommentThread key={b.id} storyId={b.id} storyName={b.nickname} />
       </div>
 
       {error && <p className="hint">{error}</p>}
